@@ -106,6 +106,7 @@ def generate_launch_description():
     # We can start a notebook from a launch file
     return LaunchDescription(
         [
+            moveit_py_node, 
             static_tf,
             robot_state_publisher,
             joint_state_publisher,

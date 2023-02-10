@@ -2,6 +2,7 @@
 """
 A script to outline the fundamentals of the moveit_py motion planning API.
 """
+import math
 import numpy as np
 import rclpy
 from rclpy.node import Node
@@ -68,4 +69,4 @@ def main():
         lite6.execute()
 
 if __name__ == "__main__":
-    main()"
+    main()
