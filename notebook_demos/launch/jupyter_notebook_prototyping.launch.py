@@ -73,7 +73,6 @@ def generate_launch_description():
         os.path.join(get_package_share_directory('xarm_api'), 'config', 'xarm_user_params.yaml'),
         ros_namespace='', node_name='ufactory_driver'
     )
-    print(moveit_config.robot_description)
     ros2_control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
