@@ -25,7 +25,7 @@ command_out_type: trajectory_msgs/JointTrajectory
 
 # What to publish? Can save some bandwidth as most robots only require positions or velocities
 publish_joint_positions: true
-publish_joint_velocities: true
+publish_joint_velocities: false
 publish_joint_accelerations: false
 
 ## Plugins for smoothing outgoing commands
@@ -35,24 +35,23 @@ smoothing_filter_plugin_name: "online_signal_smoothing::ButterworthFilterPlugin"
 # which other nodes can use as a source for information about the planning environment.
 # NOTE: If a different node in your system is responsible for the "primary" planning scene instance (e.g. the MoveGroup node),
 # then is_primary_planning_scene_monitor needs to be set to false.
-is_primary_planning_scene_monitor: false
+is_primary_planning_scene_monitor: true
 
 ## MoveIt properties
 move_group_name:  lite6  # Often 'manipulator' or 'arm'
 planning_frame: link_base  # The MoveIt planning frame. Often 'base_link' or 'world'
 
 ## Other frames
-ee_frame_name: link6  # The name of the end effector link, used to return the EE pose
+ee_frame_name: link_eef  # The name of the end effector link, used to return the EE pose
 robot_link_command_frame:  link_base  # commands must be given in the frame of a robot link. Usually either the base or end effector
 
 ## Stopping behaviour
-incoming_command_timeout:  0.1  # Stop servoing if X seconds elapse without a new command
+incoming_command_timeout:  0.2  # Stop servoing if X seconds elapse without a new command
 
 ## Configure handling of singularities and joint limits
 lower_singularity_threshold:  17.0  # Start decelerating when the condition number hits this (close to singularity)
 hard_stop_singularity_threshold: 30.0 # Stop when the condition number hits this
 joint_limit_margin: 0.1 # added as a buffer to joint limits [radians]. If moving quickly, make this larger.
-leaving_singularity_threshold_multiplier: 2.0 # Multiply the hard stop limit by this when leaving singularity (see https://github.com/ros-planning/moveit2/pull/620)
 
 ## Topic names
 cartesian_command_in_topic: ~/delta_twist_cmds  # Topic for incoming Cartesian twist commands
@@ -64,6 +63,9 @@ command_out_topic: /lite6_traj_controller/joint_trajectory # Publish outgoing co
 ## Collision checking for the entire robot body
 check_collisions: true # Check collisions?
 collision_check_rate: 10.0 # [Hz] Collision-checking can easily bog down a CPU if done too often.
+collision_check_type: threshold_distance
 self_collision_proximity_threshold: 0.01 # Start decelerating when a self-collision is this far [m]
 scene_collision_proximity_threshold: 0.02 # Start decelerating when a scene collision is this far [m]
-
+# Parameters for "stop_distance"-type collision checking
+collision_distance_safety_factor: 1000.0 # Must be >= 1. A large safety factor is recommended to account for latency
+min_allowable_collision_distance: 0.01 # Stop if a collision is closer than this [m]

@@ -22,15 +22,15 @@ def generate_launch_description():
         .to_moveit_configs()
     )
 
-    #rviz_config_file = (
-    #    get_package_share_directory("moveit2_tutorials") + "/config/jupyter_notebook_prototyping.rviz"
-    #)
+    rviz_config_file = (
+        get_package_share_directory("lite6_moveit_demos") + "/config/lite6.rviz"
+    )
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",
         name="rviz2",
         output="log",
-    #    arguments=["-d", rviz_config_file],
+        arguments=["-d", rviz_config_file],
         parameters=[
             moveit_config.robot_description,
             moveit_config.robot_description_semantic,
@@ -96,7 +96,8 @@ def generate_launch_description():
         ]
 
     # We can start a notebook from a launch file
-    start_notebook = ExecuteProcess(cmd = ["python3 -m notebook --allow-root"], shell = True, output = "screen")
+    notebook_dir = os.path.join(get_package_share_directory("lite6_moveit_demos"), "notebooks")
+    start_notebook = ExecuteProcess(cmd = ["cd {} && python3 -m notebook --allow-root".format(notebook_dir)], shell = True, output = "screen")
     return LaunchDescription(
         [
             start_notebook,
