@@ -134,7 +134,7 @@ def generate_launch_description():
     ps4_device = Node(
             name="ps4_teleop_device",
             package="lite6_moveit_demos",
-            executable="ps4_teleop",
+            executable="ps4_teleop.py",
             output="screen",
             #parameters=[
             #    ]

@@ -7,7 +7,7 @@ from std_srvs.srv import Trigger
 
 from dataclasses import dataclass
 from moveit.servo_client.teleop import TeleopDevice
-
+from moveit.servo_client.devices.ps4_dualshock import PS4DualShock
 
 class PS4DualShockTeleop(TeleopDevice):
     "A class which encapsulates teleoperation functionalities for ps4 dualshock device."
@@ -65,7 +65,7 @@ if __name__=="__main__":
     # Instantiate and activate the teleop device
     ps4 = PS4DualShockTeleop('link_eef')
     ps4.start_teleop()
-    rclpy.spin(minimal_publisher)
+    rclpy.spin(ps4)
     
     # stop teleoperation and shutdown
     ps4.stop_teleop()
