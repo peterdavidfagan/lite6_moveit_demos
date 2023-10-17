@@ -43,30 +43,25 @@ def main():
     # Plan 1 - set states with predefined string
     ###########################################################################
     lite6.set_start_state_to_current_state()
+    
+    # instantiate a RobotState instance using the current robot model
+    robot_model = moveit.get_robot_model()
+    robot_state = RobotState(robot_model)
 
-    # set constraints message
-    joint_values = {
-        "joint1": math.radians(100),
-        "joint2": math.radians(10.4),
-        "joint3": math.radians(31.1),
-        "joint4": math.radians(-1.5),
-        "joint5": math.radians(21.5),
-        "joint6": math.radians(1.3),
-    }
-    robot_state = RobotState(moveit.get_robot_model())
-    robot_state.joint_positions = joint_values
-    joint_constraint = construct_joint_constraint(
-        robot_state=robot_state,
-        joint_model_group=moveit.get_robot_model().get_joint_model_group("lite6"),
-    )
-    lite6.set_goal_state(motion_plan_constraints=[joint_constraint])
+    # randomize the robot state
+    robot_state.set_to_random_positions()
 
+    # set goal state to the initialized robot state
+    logger.info("Set goal state to the initialized robot state")
+    lite6.set_goal_state(robot_state=robot_state)
+    
     # plan to goal
     plan_result = lite6.plan()
 
     # execute the plan
     if plan_result:
-        lite6.execute()
+        robot_trajectory = plan_result.trajectory
+        moveit.execute(robot_trajectory, controllers=[])
 
 if __name__ == "__main__":
     main()

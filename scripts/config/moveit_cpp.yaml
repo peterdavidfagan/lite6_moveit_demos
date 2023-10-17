@@ -13,8 +13,10 @@ planning_pipelines:
 plan_request_params:
   planning_attempts: 1
   planning_pipeline: ompl
-  max_velocity_scaling_factor: 1.0
-  max_acceleration_scaling_factor: 1.0
+  planner_id: "RRTConnectkConfigDefault"
+  planner_time: 1.0
+  max_velocity_scaling_factor: 0.1
+  max_acceleration_scaling_factor: 0.1
 
 ompl_rrtc:  # Namespace for individual plan request
   plan_request_params:  # PlanRequestParameters similar to the ones that are used by the single pipeline planning of moveit_cpp
