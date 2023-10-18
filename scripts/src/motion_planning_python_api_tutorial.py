@@ -43,7 +43,8 @@ def main():
     # Plan 1 - set states with predefined string
     ###########################################################################
     lite6.set_start_state_to_current_state()
-    
+    logger.info(f"Start State: {lite6.get_start_state().joint_positions}")
+
     # instantiate a RobotState instance using the current robot model
     robot_model = moveit.get_robot_model()
     robot_state = RobotState(robot_model)
@@ -59,6 +60,7 @@ def main():
     plan_result = lite6.plan()
 
     # execute the plan
+    #time.sleep(3600)
     if plan_result:
         robot_trajectory = plan_result.trajectory
         moveit.execute(robot_trajectory, controllers=[])

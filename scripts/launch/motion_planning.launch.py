@@ -66,7 +66,7 @@ def generate_launch_description():
         executable='joint_state_publisher',
         name='joint_state_publisher',
         output='screen',
-        parameters=[{'source_list': ['ufactory/joint_states']}],
+        parameters=[{'source_list': ['xarm/joint_states']}],
     )
 
     ros2_controllers_path = os.path.join(
