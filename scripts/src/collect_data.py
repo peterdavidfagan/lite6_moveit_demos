@@ -26,15 +26,15 @@ class DataCollector(Node):
         
         # waypoints
         t = np.linspace(0, 20, 100)
-        x = ((np.sin(t) + 1) / 6) + 0.1
-        y = ((np.cos(t) + 1) / 6)
+        x = ((np.sin(t) + 1) / 10) + 0.1
+        y = ((np.cos(t) + 1) / 10)
         z = (t / 50) + 0.1
 
         # generate list of poses
         self.poses = []
         for i in range(len(t)):
             pose = PoseStamped()
-            pose.header.frame_id = "base_link"
+            pose.header.frame_id = "link_base"
             pose.pose.position.x = x[i]
             pose.pose.position.y = y[i]
             pose.pose.position.z = z[i]
@@ -43,7 +43,8 @@ class DataCollector(Node):
             pose.pose.orientation.z = 0.0   
             pose.pose.orientation.w = 0.0
             self.poses.append(pose)
-        
+       
+        print(self.poses)
         self.target_pose = self.set_target_pose(self.poses[0])
         # initialize motion planning client
         moveit_config = (
@@ -102,7 +103,7 @@ class DataCollector(Node):
             self.logger.info("Target pose set to: %s" % self.poses[0])
             self.set_target_pose(self.poses[0])
             
-        self.target_pose.header.stamp = self.get_clock(.now().to_msg()
+        self.target_pose.header.stamp = self.get_clock().now().to_msg()
         self.publisher.publish(self.target_pose)
     
     def set_servo_command_type(self, command_type):
@@ -166,7 +167,7 @@ class DataCollector(Node):
         for i in range(len(t)):
             self.arm.set_start_state_to_current_state()
             pose_goal = PoseStamped()
-            pose_goal.header.frame_id = "base_link"
+            pose_goal.header.frame_id = "link_base"
             pose_goal.header.stamp = self.get_clock().now().to_msg()
             pose_goal.pose.orientation.x = 0.924
             pose_goal.pose.orientation.y = -0.382
@@ -175,7 +176,7 @@ class DataCollector(Node):
             pose_goal.pose.position.x = x[i]
             pose_goal.pose.position.y = y[i]
             pose_goal.pose.position.z = z[i]
-            self.arm.set_goal_state(pose_stamped_msg=pose_goal, pose_link="panda_link8")
+            self.arm.set_goal_state(pose_stamped_msg=pose_goal, pose_link="link_eef")
 
             plan = self.arm.plan()
             if plan:
@@ -195,7 +196,7 @@ class DataCollector(Node):
             # set target pose
             pose = PoseStamped()
             pose.header.stamp = self.get_clock().now().to_msg()
-            pose.header.frame_id = "base_link"
+            pose.header.frame_id = "link_base"
             pose.pose.orientation.x = 0.924
             pose.pose.orientation.y = -0.382
             pose.pose.orientation.z = 0.0
@@ -249,4 +250,4 @@ if __name__=="__main__":
     rclpy.spin(node)
 
     node.destroy_node()
-    rclpy.shutdown())
+    rclpy.shutdown()

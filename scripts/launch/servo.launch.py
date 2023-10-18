@@ -1,6 +1,9 @@
 import os
 import launch
 import launch_ros
+from launch_ros.actions import Node, SetParameter
+from launch.actions import ExecuteProcess
+from launch.launch_description_sources import load_python_launch_file_as_module
 from ament_index_python.packages import get_package_share_directory
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration
@@ -29,13 +32,15 @@ def generate_launch_description():
 
     # Get parameters for the Servo node
     servo_params = {
-        "lite6_moveit_demos": ParameterBuilder("lite6_moveit_demos")
+        "moveit_servo": ParameterBuilder("lite6_moveit_demos")
         .yaml("config/servo.yaml")
         .to_dict()
     }
 
+    print(servo_params)
+
     # This filter parameter should be >1. Increase it for greater smoothing but slower motion.
-    low_pass_filter_coeff = {"butterworth_filter_coeff": 1.5}
+    low_pass_filter_coeff = {"butterworth_filter_coeff": 10.0}
 
     #rviz_config_file = (
     #    get_package_share_directory("moveit2_tutorials") + "/config/jupyter_notebook_prototyping.rviz"
